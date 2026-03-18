@@ -1,112 +1,128 @@
 # CLAUDE.md
 
-This file provides guidance to AI assistants (Claude and others) working in this repository.
+This file is read automatically by Claude at the start of every session. It provides full project context so AI assistants can work effectively without needing to re-explore the codebase each time.
 
-## Repository Overview
+---
 
-**Repository:** arpitmadan/Claude-Coding-Projects
-**Status:** Initial setup — no source code has been committed yet.
+## What This Repo Is
 
-This is a fresh repository created to house coding projects. As projects are added, this file should be updated to reflect the current structure, tech stack, and conventions.
+**Claude-Coding-Projects** is a personal monorepo containing small, focused tools built with Claude Code.
 
-## Current State
+| Project | Path | Description |
+|---------|------|-------------|
+| Roohi Tracker | `roohi-tracker/` | Baby activity log (feeding, poop, pee) for newborn Roohi |
 
-The repository is empty aside from this documentation file. When project code is added:
-1. Update the "Project Structure" section below
-2. Update the "Tech Stack" section with actual dependencies
-3. Add specific build/test/lint commands
-4. Document any project-specific conventions
+---
 
-## Development Branch Conventions
+## Project: Roohi Tracker
 
-- Feature branches follow the pattern: `claude/<description>-<session-id>`
-- Always develop on the designated branch and push with:
-  ```bash
-  git push -u origin <branch-name>
-  ```
-- Never push to `main` or `master` directly without explicit permission
+### Purpose
+A calm, mobile-first web app for logging a newborn's daily activities — feeding, poop, and pee — without anxiety-inducing notifications. Replaces Huckleberry for a simpler experience on iPhone.
 
-## Git Workflow
+### Tech Stack
+- **Pure HTML/CSS/JavaScript** — single file, no build step, no dependencies
+- **localStorage** — all data stored in the browser, no server needed
+- **Mobile-first** — designed for iPhone, large tap targets, calm pastel colors
 
+### How to Use / Run
 ```bash
-# Check current branch
-git branch
+# Just open in a browser — no server, no install:
+open roohi-tracker/index.html
 
-# Stage and commit changes
-git add <specific-files>
-git commit -m "clear, descriptive commit message"
+# Or serve locally if needed:
+python3 -m http.server 8080
+# then visit http://localhost:8080/roohi-tracker/
+```
 
-# Push to remote
+### File Structure
+```
+roohi-tracker/
+└── index.html      # Entire app — HTML + CSS + JS in one file
+```
+
+### Features
+- **Log Activity** — date/time (auto-filled), feed type, poop (color + size), pee (size), notes
+- **Today's Summary** — feeds/poops/pees count and last feed time at a glance
+- **History View** — scrollable table, filterable by date
+- **Delete Entries** — tap ✕ on any row
+- **Export CSV** — downloads all data as a spreadsheet
+
+### Data Model
+Each entry stored in `localStorage` under key `roohi-entries` as a JSON array:
+```json
+{
+  "id": 1710000000000,
+  "date": "2026-03-18",
+  "time": "14:30",
+  "feed": "Regular",        // "Regular" | "Snack" | "Top-up" | "No" | null
+  "poop": true,             // true | false | null
+  "poopColor": "Black-green", // "Black-green" | "Yellow" | "Brown" | "Green" | null
+  "poopSize": "Small",      // "Small" | "Medium" | "Large" | null
+  "pee": true,              // true | false | null
+  "peeSize": "Big",         // "Small" | "Medium" | "Big" | null
+  "notes": ""
+}
+```
+
+### Design Decisions
+- **No server/backend** — keeps it simple; data lives on-device
+- **Single HTML file** — can be airdropped, shared, or bookmarked without any hosting
+- **No notifications** — intentional; the previous app (Huckleberry) caused anxiety
+- **Calm colors** — warm peach/coral palette, not clinical or high-contrast
+
+### If Adding Features
+- Keep the single-file approach unless complexity truly demands otherwise
+- Do not add push notifications or reminders — explicitly not wanted
+- If adding a backend/sync, prefer a simple approach (e.g. JSON file export/import)
+- Test on mobile viewport (375px width) before desktop
+
+---
+
+## General Conventions (All Projects)
+
+### Code Style
+- Minimal — implement only what is asked
+- No build tools unless the project genuinely needs them
+- Prefer editing existing files over creating new ones
+- Delete unused code rather than commenting it out
+
+### Security
+- Never commit API keys, tokens, or credentials
+- Sanitize any user input before rendering as HTML (use `textContent`, not `innerHTML`, for user data)
+
+### Git Workflow
+```bash
+# Always develop on the designated branch
+git checkout claude/<description>-<session-id>
+
+# Stage specific files (never `git add -A` blindly)
+git add roohi-tracker/index.html
+
+# Commit with clear message
+git commit -m "Short description of what and why"
+
+# Push
 git push -u origin <branch-name>
 ```
 
 ### Commit Message Style
-- Use the imperative mood: "Add feature" not "Added feature"
-- Keep the first line under 72 characters
-- Reference issue numbers when applicable: `Fix #42: resolve auth bug`
+- Imperative mood: "Add feature" not "Added feature"
+- First line ≤ 72 characters
+- Describe the *why* when it isn't obvious from the *what*
 
-## Project Structure
-
-> To be updated when source code is added.
-
-```
-Claude-Coding-Projects/
-├── CLAUDE.md           # This file
-└── (projects to be added)
-```
-
-## Tech Stack
-
-> To be updated when dependencies are established.
-
-## Development Workflow
-
-### Running the Project
-
-> To be updated once a project is initialized.
-
-### Running Tests
-
-> To be updated once a test framework is configured.
-
-### Linting and Formatting
-
-> To be updated once linting tools are configured.
-
-### Building
-
-> To be updated once a build process is defined.
-
-## Key Conventions
-
-### Code Style
-- Follow the conventions of the language/framework in use
-- Keep functions small and single-purpose
-- Avoid over-engineering — implement the minimum needed for the current task
-- Do not add docstrings, comments, or type annotations to unchanged code
-- Only validate at system boundaries (user input, external APIs)
-
-### Security
-- Never commit secrets, credentials, or API keys
-- Do not introduce OWASP top 10 vulnerabilities (SQL injection, XSS, command injection, etc.)
-- Validate and sanitize all external input
-
-### File Management
-- Prefer editing existing files over creating new ones
-- Delete unused code rather than commenting it out or using backwards-compatibility shims
-- Do not create documentation files unless explicitly requested
+---
 
 ## AI Assistant Guidelines
 
-When working in this repository:
+1. **Read files before editing** — never modify code you haven't read
+2. **One file, one job** — the Roohi Tracker is intentionally a single HTML file; keep it that way unless there's a compelling reason
+3. **Update this file** when new projects are added or significant changes are made to existing ones
+4. **No speculative features** — only implement what is explicitly requested
+5. **Confirm before destructive actions** — deleting entries, force-pushing, dropping data
 
-1. **Read before modifying** — always read a file before editing it
-2. **Minimal changes** — only change what is directly requested or clearly necessary
-3. **No speculative features** — do not add error handling, fallbacks, or abstractions for hypothetical scenarios
-4. **Confirm risky actions** — ask before force-pushing, deleting branches, or modifying shared infrastructure
-5. **Update this file** — when significant new code, tooling, or conventions are added, update the relevant sections of this CLAUDE.md
+---
 
 ## Getting Help
 
-- Report issues at: https://github.com/anthropics/claude-code/issues
-- Claude Code docs: `/help` in the Claude Code CLI
+- Claude Code docs: type `/help` in the Claude Code CLI
+- Report bugs: https://github.com/anthropics/claude-code/issues
